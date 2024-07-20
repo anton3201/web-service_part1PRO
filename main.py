@@ -17,10 +17,18 @@ class Item(BaseModel):
 app = FastAPI()
 
 
+#переменная для подсчета количества
+
+count = 0;
+
 # функция обработки get запроса + декоратор
 @app.get("/")
 def read_root():
     return {"message": "answer"}
+
+@app.get("/count")
+def read_count():
+    return {"message": count}
 
 
 # функция обработки post запроса + декоратор
@@ -28,4 +36,6 @@ def read_root():
 def get_answer(question: Item):
     ch = Chunk("https://docs.google.com/document/d/11MU3SnVbwL_rM-5fIC14Lc3XnbAV4rY1Zd_kpcMuH4Y")
     answer = ch.get_answer(query=question.text)
+    global count
+    count = count + 1
     return {"message": answer}
